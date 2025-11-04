@@ -10,6 +10,7 @@ import SwiftUI
 
 struct SupportView: View {
     @Environment(\.dismiss) private var dismiss
+    @AppStorage("isDarkMode") private var isDarkMode = false
     @State private var selectedQuestion: FAQItem?
     
     var body: some View {
@@ -116,6 +117,7 @@ struct SupportView: View {
                 }
             }
         }
+        .environment(\.colorScheme, isDarkMode ? .dark : .light)
     }
     
     private let faqItems: [FAQItem] = [

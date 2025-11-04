@@ -10,9 +10,9 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
+    @AppStorage("isDarkMode") private var isDarkMode = false
     @State private var notificationsEnabled = true
     @State private var dailyReminderTime = Date()
-    @AppStorage("isDarkMode") private var isDarkMode = false
     
     var body: some View {
         NavigationStack {
@@ -121,6 +121,7 @@ struct SettingsView: View {
                 }
             }
         }
+        .environment(\.colorScheme, isDarkMode ? .dark : .light)
     }
 }
 

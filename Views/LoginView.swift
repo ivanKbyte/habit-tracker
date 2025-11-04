@@ -253,8 +253,11 @@ struct CustomTextField: View {
             
             if isSecure {
                 SecureField(placeholder, text: $text)
+                    .textContentType(.none)
+                    .autocorrectionDisabled()
             } else {
                 TextField(placeholder, text: $text)
+                    .autocorrectionDisabled()
             }
             
             if showPasswordToggle {

@@ -15,6 +15,7 @@ struct HabitTrackerApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject private var authManager = AuthenticationManager()
     @State private var isLoading = true
+    @AppStorage("isDarkMode") private var isDarkMode = false
     
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
@@ -59,6 +60,7 @@ struct HabitTrackerApp: App {
             }
             .animation(.easeInOut(duration: 0.4), value: isLoading)
             .animation(.easeInOut(duration: 0.4), value: authManager.isAuthenticated)
+            .preferredColorScheme(isDarkMode ? .dark : nil)
             .onAppear {
                 // Shorter delay - just enough for smooth animation
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {

@@ -10,6 +10,7 @@ import SwiftUI
 
 struct AboutView: View {
     @Environment(\.dismiss) private var dismiss
+    @AppStorage("isDarkMode") private var isDarkMode = false
     
     var body: some View {
         NavigationStack {
@@ -33,6 +34,7 @@ struct AboutView: View {
                 }
             }
         }
+        .environment(\.colorScheme, isDarkMode ? .dark : .light)
     }
     
     private var appIconSection: some View {

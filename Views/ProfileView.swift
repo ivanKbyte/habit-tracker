@@ -6,7 +6,11 @@ struct ProfileView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Habit.createdAt) private var habits: [Habit]
     @StateObject private var authManager = AuthenticationManager()
+    @AppStorage("isDarkMode") private var isDarkMode = false
     @State private var showSignOutAlert = false
+    @State private var showNotifications = false
+    @State private var showSupport = false
+    @State private var showAbout = false
     @State private var userName: String = ""
     @State private var userEmail: String = ""
     
@@ -39,6 +43,15 @@ struct ProfileView: View {
                 }
             } message: {
                 Text("Are you sure you want to sign out?")
+            }
+            .sheet(isPresented: $showNotifications) {
+                SettingsView()
+            }
+            .sheet(isPresented: $showSupport) {
+                SupportView()
+            }
+            .sheet(isPresented: $showAbout) {
+                AboutView()
             }
             .onAppear {
                 loadUserInfo()
@@ -123,40 +136,43 @@ struct ProfileView: View {
                 .fontWeight(.semibold)
             
             VStack(spacing: 0) {
-                ProfileMenuItem(
+                menuButton(
                     icon: "bell.fill",
                     title: "Notifications",
-                    color: .orange
+                    color: .orange,
+                    showChevron: true
                 ) {
-                    // Handle notifications
+                    showNotifications = true
                 }
                 
                 Divider()
                     .padding(.leading, 60)
                 
-                ProfileMenuItem(
+                menuButton(
                     icon: "questionmark.circle.fill",
                     title: "Help & Support",
-                    color: .blue
+                    color: .blue,
+                    showChevron: true
                 ) {
-                    // Handle help
+                    showSupport = true
                 }
                 
                 Divider()
                     .padding(.leading, 60)
                 
-                ProfileMenuItem(
+                menuButton(
                     icon: "info.circle.fill",
                     title: "About",
-                    color: .purple
+                    color: .purple,
+                    showChevron: true
                 ) {
-                    // Handle about
+                    showAbout = true
                 }
                 
                 Divider()
                     .padding(.leading, 60)
                 
-                ProfileMenuItem(
+                menuButton(
                     icon: "arrow.right.square.fill",
                     title: "Sign Out",
                     color: .red,
@@ -204,6 +220,43 @@ struct ProfileView: View {
             print("Error signing out: \(error)")
         }
     }
+    
+    @ViewBuilder
+    private func menuButton(
+        icon: String,
+        title: String,
+        color: Color,
+        showChevron: Bool,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) {
+            HStack(spacing: 16) {
+                ZStack {
+                    Circle()
+                        .fill(color.opacity(0.1))
+                        .frame(width: 40, height: 40)
+                    Image(systemName: icon)
+                        .foregroundColor(color)
+                        .font(.system(size: 18))
+                }
+                
+                Text(title)
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.primary)
+                
+                Spacer()
+                
+                if showChevron {
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.gray)
+                        .font(.system(size: 14))
+                }
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 12)
+        }
+        .buttonStyle(.plain)
+    }
 }
 
 struct QuickStatCard: View {
@@ -232,39 +285,6 @@ struct QuickStatCard: View {
                 .fill(Color(.systemBackground))
                 .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 4)
         )
-    }
-}
-
-struct ProfileMenuItem: View {
-    let icon: String
-    let title: String
-    let color: Color
-    var showChevron: Bool = true
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: 16) {
-                Image(systemName: icon)
-                    .font(.title3)
-                    .foregroundColor(color)
-                    .frame(width: 28)
-                
-                Text(title)
-                    .font(.body)
-                    .foregroundColor(.primary)
-                
-                Spacer()
-                
-                if showChevron {
-                    Image(systemName: "chevron.right")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-            }
-            .padding(16)
-        }
-        .buttonStyle(.plain)
     }
 }
 

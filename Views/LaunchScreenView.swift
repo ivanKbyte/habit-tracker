@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct LaunchScreenView: View {
-    @State private var scale: CGFloat = 0.7
+    @State private var scale: CGFloat = 0.5
     @State private var opacity: Double = 0
     
     var body: some View {
@@ -24,7 +24,7 @@ struct LaunchScreenView: View {
             )
             .ignoresSafeArea()
             
-            VStack(spacing: 20) {
+            VStack(spacing: 24) {
                 ZStack {
                     Circle()
                         .fill(
@@ -35,7 +35,7 @@ struct LaunchScreenView: View {
                             )
                         )
                         .frame(width: 120, height: 120)
-                        .shadow(color: .blue.opacity(0.4), radius: 20, x: 0, y: 10)
+                        .shadow(color: .blue.opacity(0.5), radius: 25, x: 0, y: 10)
                     
                     Image(systemName: "checkmark.circle.fill")
                         .font(.system(size: 60))
@@ -45,12 +45,12 @@ struct LaunchScreenView: View {
                 .opacity(opacity)
                 
                 Text("HabitTracker")
-                    .font(.system(size: 32, weight: .bold, design: .rounded))
+                    .font(.system(size: 34, weight: .bold, design: .rounded))
                     .opacity(opacity)
             }
         }
         .onAppear {
-            withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
+            withAnimation(.spring(response: 0.8, dampingFraction: 0.65)) {
                 scale = 1.0
                 opacity = 1.0
             }
