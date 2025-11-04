@@ -1,11 +1,3 @@
-//
-//  ProfileView.swift
-//  habit-tracker
-//
-//  Created by Ivan Kharitonenko on 31/10/2025.
-//
-
-
 import SwiftUI
 import SwiftData
 import FirebaseAuth

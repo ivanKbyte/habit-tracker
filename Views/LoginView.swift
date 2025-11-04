@@ -1,11 +1,3 @@
-//
-//  LoginView.swift
-//  habit-tracker
-//
-//  Created by Ivan Kharitonenko on 31/10/2025.
-//
-
-
 import SwiftUI
 
 struct LoginView: View {
@@ -155,8 +147,7 @@ struct LoginView: View {
         } label: {
             HStack {
                 if authManager.isLoading {
-                    ProgressView()
-                        .tint(.white)
+                    CustomLoadingView(tintColor: .white)
                 } else {
                     Text("Sign In")
                         .font(.headline)
@@ -243,15 +234,15 @@ struct CustomTextField: View {
     @Binding var text: String
     var isSecure: Bool = false
     var showPasswordToggle: Bool = false
-    @Binding var showPassword: Bool?
+    @Binding var showPassword: Bool
     
-    init(icon: String, placeholder: String, text: Binding<String>, isSecure: Bool = false, showPasswordToggle: Bool = false, showPassword: Binding<Bool>? = nil) {
+    init(icon: String, placeholder: String, text: Binding<String>, isSecure: Bool = false, showPasswordToggle: Bool = false, showPassword: Binding<Bool> = .constant(false)) {
         self.icon = icon
         self.placeholder = placeholder
         self._text = text
         self.isSecure = isSecure
         self.showPasswordToggle = showPasswordToggle
-        self._showPassword = showPassword.map { Binding($0) } ?? .constant(nil)
+        self._showPassword = showPassword
     }
     
     var body: some View {
@@ -268,11 +259,11 @@ struct CustomTextField: View {
             
             if showPasswordToggle {
                 Button {
-                    showPassword?.toggle()
+                    showPassword.toggle()
                     let generator = UIImpactFeedbackGenerator(style: .light)
                     generator.impactOccurred()
                 } label: {
-                    Image(systemName: (showPassword ?? false) ? "eye.fill" : "eye.slash.fill")
+                    Image(systemName: showPassword ? "eye.fill" : "eye.slash.fill")
                         .foregroundColor(.gray)
                 }
             }

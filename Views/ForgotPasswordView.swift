@@ -2,7 +2,7 @@
 //  ForgotPasswordView.swift
 //  habit-tracker
 //
-//  Created by Ivan Kharitonenko on 31/10/2025.
+//  Created by Ivan Kharitonenko on 04/11/2025.
 //
 
 
@@ -113,8 +113,7 @@ struct ForgotPasswordView: View {
         } label: {
             HStack {
                 if authManager.isLoading {
-                    ProgressView()
-                        .tint(.white)
+                    CustomLoadingView(tintColor: .white)
                 } else {
                     Text("Send Reset Link")
                         .font(.headline)

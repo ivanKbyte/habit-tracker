@@ -1,11 +1,3 @@
-//
-//  AppDelegate.swift
-//  habit-tracker
-//
-//  Created by Ivan Kharitonenko on 31/10/2025.
-//
-
-
 import SwiftUI
 import SwiftData
 import FirebaseCore
@@ -22,6 +14,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct HabitTrackerApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject private var authManager = AuthenticationManager()
+    @State private var isLoading = true
     
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
@@ -39,12 +32,40 @@ struct HabitTrackerApp: App {
 
     var body: some Scene {
         WindowGroup {
-            if authManager.isAuthenticated {
-                ContentView()
-                    .environmentObject(authManager)
-            } else {
-                LoginView()
-                    .environmentObject(authManager)
+            ZStack {
+                // Keep background consistent to avoid white flash
+                LinearGradient(
+                    colors: [
+                        Color.blue.opacity(0.3),
+                        Color.purple.opacity(0.3)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
+                
+                if isLoading {
+                    LaunchScreenView()
+                        .transition(.opacity)
+                } else {
+                    if authManager.isAuthenticated {
+                        ContentView()
+                            .transition(.opacity)
+                    } else {
+                        LoginView()
+                            .transition(.opacity)
+                    }
+                }
+            }
+            .animation(.easeInOut(duration: 0.4), value: isLoading)
+            .animation(.easeInOut(duration: 0.4), value: authManager.isAuthenticated)
+            .onAppear {
+                // Shorter delay - just enough for smooth animation
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                    withAnimation {
+                        isLoading = false
+                    }
+                }
             }
         }
         .modelContainer(sharedModelContainer)

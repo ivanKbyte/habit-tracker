@@ -1,8 +1,8 @@
 //
-//  SignUpView.swift
+//  SignUpView 2.swift
 //  habit-tracker
 //
-//  Created by Ivan Kharitonenko on 31/10/2025.
+//  Created by Ivan Kharitonenko on 04/11/2025.
 //
 
 
@@ -223,8 +223,7 @@ struct SignUpView: View {
         } label: {
             HStack {
                 if authManager.isLoading {
-                    ProgressView()
-                        .tint(.white)
+                    CustomLoadingView(tintColor: .white)
                 } else {
                     Text("Create Account")
                         .font(.headline)
